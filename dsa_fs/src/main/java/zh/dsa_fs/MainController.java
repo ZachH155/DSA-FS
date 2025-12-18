@@ -2,8 +2,12 @@ package zh.dsa_fs;
 
 import org.springframework.web.bind.annotation.*;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.util.ArrayList;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+
 
 
 
@@ -48,10 +52,33 @@ public class MainController {
 
     //process-numbers page
     @GetMapping("/process-numbers")
-    public String renderProcessNumbers(@RequestParam("numbersArray") ArrayList<Integer> numbersArray) {
+    public String renderProcessNumbers(@RequestParam("numbersArray") ArrayList<Integer> numbersArray, Model model) {
         
+        BSTNode root = new BSTNode(numbersArray.getFirst());
+
+        for (Integer integer : numbersArray) {
+            if (integer != root.getSelf()) {
+                root.addRecursive(root, integer, root.getLevel());
+            }
+        }
+
+        ArrayList<BSTNode> queue = new ArrayList<BSTNode>();
+        ArrayList<int[]> binaryTreeArray = new ArrayList<int[]>();
+
+        root.searchByLevel(root, queue, binaryTreeArray, false);
+        
+
+       model.addAttribute("BTA", binaryTreeArray);
+
         return "process-numbers";
     }
+
+    @PostMapping("/back")
+    public String back() {
+        
+        return "redirect:";
+    }
+    
     
 
     //previous trees page
