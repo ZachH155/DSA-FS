@@ -75,8 +75,8 @@ public class MainController {
 
     @PostMapping("/back")
     public String back() {
-        
-        return "redirect:";
+    
+        return "redirect:enter-numbers";
     }
     
     
